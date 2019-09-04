@@ -11,10 +11,10 @@ import PyKDL
 import sys
 
 pi = np.pi
-target_angle = 30
+target_angle = 20
 deg2rad = pi / 180
 delta_angle = 1 * deg2rad
-delta_x = 0.005
+delta_x = 0.0005
 camera2base = np.array([[0, 0, 1], [-1, 0, 0], [0, -1, 0]])
 
 def get_visual_info():
@@ -69,6 +69,10 @@ if __name__ == '__main__':
     # initial_joint_config = np.array([ 0.89911145,  0.27092891,  0.13593156, -0.88407612, -0.11763831, -0.78022419]) 1
     # initial_joint_config = np.array([ 0.43078949,  0.20155561,  0.14573411, -1.17457623,  0.28593595, -0.69887705]) retractor1
     initial_joint_config = np.array([ 0.43078949,  0.20155561,  0.14573411, -1.17457623,  0.28593595, -0.69887705])
+    initial_joint_config = np.array([ 1.07082642,  0.36412686,  0.17979802, -1.16640199,  0.17136347, -0.41294346])
+
+
+    # initial_joint_config = np.array([ 0.90556766,  0.22378935,  0.1722925 , -1.24583889,  0.21130919, -0.25821793])
 
     # end_position array([ 1.0794141 ,  0.24356727,  0.11532444, -1.48058646, -0.12166953, -1.04386594])
     psm.move_joint(initial_joint_config)
@@ -95,7 +99,7 @@ if __name__ == '__main__':
     log_angle = np.array([])
     log_centroid = np.array([])
 
-    while (abs(rotate_angle - target_angle) > 2):
+    while (abs(rotate_angle - 21) > 0.5):
         x_init = psm.get_current_position()
         x_init_position = x_init.p
         x_init_position_np = np.array([[x_init_position.x(), x_init_position.y(), x_init_position.z()]]).T
@@ -111,13 +115,14 @@ if __name__ == '__main__':
         rotate_radius = centroid - rotate_origin
         print(rotate_radius) 
         rotate_radius_error = np.linalg.norm(rotate_radius - rotate_radius_initial)    
-
+        
         x_disp_np = delta_x * principal_axis_prep
+        print(x_disp_np)
         x_dsr_base_np = x_init_position_np + np.matmul(camera2base, x_disp_np)
         x_dsr_base_PyKDL = PyKDL.Vector(x_dsr_base_np[0,0], x_dsr_base_np[1,0], x_dsr_base_np[2,0])
         x_disp_base_np = np.matmul(camera2base, x_disp_np)
         x_disp_base_PyKDL = PyKDL.Vector(x_disp_base_np[0,0], x_disp_base_np[1,0], x_disp_base_np[2,0])
-        x_rotation_base = np.matmul(camera2base, rotz(-0.2*delta_angle))
+        x_rotation_base = np.matmul(camera2base, rotz(-0.02*delta_angle))
         x_rotation_base = np.matmul(x_rotation_base, camera2base.T)
         r = np_array2PyKDL_Rotation(x_rotation_base)
 
@@ -128,8 +133,10 @@ if __name__ == '__main__':
         log_angle = np.append(log_angle, rotate_angle)
         log_centroid = np.append(log_centroid, centroid)
 
-        psm.dmove(x_dsr_base_PyKDL)
-        # psm.dmove(r)
+        psm.dmove(x_disp_base_PyKDL)
+        #if rotate_angle > 25:
+        #    psm.dmove(r)
+        #    print("OK")
 
     np.save('rotate_angle', log_angle)
     np.save('centroid', log_centroid)
