@@ -65,7 +65,7 @@ def np_array2PyKDL_Rotation(np_array):
 
 if __name__ == '__main__':
     psm = dvrk.psm('PSM1')
-    #initial_joint_config = np.array([0.86180293,  0.22168877,  0.13381731, -1.1603237 , -0.09953447, -1.08623039]) 1
+    # initial_joint_config = np.array([0.86180293,  0.22168877,  0.13381731, -1.1603237 , -0.09953447, -1.08623039]) 1
     # initial_joint_config = np.array([ 0.89911145,  0.27092891,  0.13593156, -0.88407612, -0.11763831, -0.78022419]) 1
     # initial_joint_config = np.array([ 0.43078949,  0.20155561,  0.14573411, -1.17457623,  0.28593595, -0.69887705]) retractor1
     initial_joint_config = np.array([ 0.43078949,  0.20155561,  0.14573411, -1.17457623,  0.28593595, -0.69887705])
