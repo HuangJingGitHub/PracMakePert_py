@@ -9,7 +9,7 @@ class solutionLeetcode_7:
         return 0
 
 test_x = int(110)
-soln = solutionLeetcode_7
+soln = solutionLeetcode_7()
 reverse_x = soln.reverse(soln, test_x)
 
 print(reverse_x)
