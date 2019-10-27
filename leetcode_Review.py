@@ -21,6 +21,15 @@ class solutionLeetcode_3:
         return max_len, longestSubstring
 
 
+class solutionLeetcode_4:
+    def findMedianSortedArrays(self, nums1, nums2):
+        nums1.extend(nums2)
+        nums1.sort()
+        if len(nums1) % 2 == 0:
+            return sum(nums1[[len(nums1)//2]-1:len(nums1)//2+1])/2
+        else:
+            return nums1[(len(nums1)-1)//2]
+
 class solutionLeetcode_7:
     def reverse(self, x) -> int:
         s = str(x)[::-1].strip('-')
