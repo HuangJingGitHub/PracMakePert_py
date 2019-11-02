@@ -61,7 +61,7 @@ class solutionLeetcode_6:
 
 class solutionLeetcode_7:
     def reverse(self, x) -> int:
-        s = str(x)[::-1].strip('-')
+        s = str(x)[::-1].strip('-')   # use extended slices to reverse a string.
         if int(s) < 2**31:
             if x >= 0:
                 return int(s)
