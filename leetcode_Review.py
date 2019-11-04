@@ -69,6 +69,29 @@ class solutionLeetcode_7:
                 return 0 - int(s)
         return 0
 
+
+class solutionLeetcode_8:
+        def myAtoi(self, str: str) -> int:
+            validChar = ['-', '+', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+            numberChar = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+            initialDigit = True
+            startIndex = -1
+            for i in range(len(str)):
+                if str[i] == ' ':
+                    continue
+                if (str[i] not in validChar) and initialDigit:
+                    return 0
+                if str[i] in validChar and initialDigit:
+                    startIndex = i
+                    initialDigit = False
+                if (str[i] not in numberChar) and (not initialDigit):
+                    endIndex = i
+                    break
+                endIndex = len(str)
+
+            numberStr = str[startIndex:endIndex]
+            return int(numberStr)
+
 test_x = int(110)
 soln = solutionLeetcode_7()
 reverse_x = soln.reverse(test_x)
