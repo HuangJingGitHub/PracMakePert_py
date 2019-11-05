@@ -73,20 +73,35 @@ class solutionLeetcode_7:
 class solutionLeetcode_8:
         def myAtoi(self, str: str) -> int:
             validChar = ['-', '+', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-            numberChar = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-            initialDigit = True
+            validNumber = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+            if len(str) == 0:
+                return 0
             startIndex = -1
+            endIndex = 0
+            initialChar = True
+            lastEntryValid = True
             for i in range(len(str)):
                 if str[i] == ' ':
                     continue
-                if (str[i] not in validChar) and initialDigit:
+                if (str[i] not in validChar):
                     return 0
-                if str[i] in validChar and initialDigit:
+                if (str[i] in validChar) and initialChar:
+                    initialChar = False
                     startIndex = i
-                    initialDigit = False
-                if (str[i] not in numberChar) and (not initialDigit):
+                    if i == len(str) - 1:
+                        if str[i] in ['-', '+']:
+                            return 0
+                        else:
+                            endIndex = len(str)
+                            break
+                    continue
+                if (str[i] not in validNumber) and (not initialChar):
                     endIndex = i
-                    break
+                    lastEntryValid = False
+
+            if startIndex == -1:
+                return 0
+            if lastEntryValid:
                 endIndex = len(str)
 
             numberStr = str[startIndex:endIndex]
