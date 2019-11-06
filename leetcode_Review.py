@@ -76,14 +76,16 @@ class solutionLeetcode_8:
             validNumber = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
             if len(str) == 0:
                 return 0
+
             startIndex = -1
             endIndex = 0
             initialChar = True
             lastEntryValid = True
+            stringChar = ''
             for i in range(len(str)):
-                if str[i] == ' ':
+                if str[i] == ' ' and initialChar:
                     continue
-                if (str[i] not in validChar):
+                if (str[i] not in validChar) and initialChar:
                     return 0
                 if (str[i] in validChar) and initialChar:
                     initialChar = False
@@ -92,12 +94,18 @@ class solutionLeetcode_8:
                         if str[i] in ['-', '+']:
                             return 0
                         else:
-                            endIndex = len(str)
-                            break
+                            return int(str)
+                    if (i < len(str) - 1) and (str[i + 1] not in validNumber):
+                        if str[i] in ['-', '+']:
+                            return 0
+                        else:
+                            return int(str[i])
+
                     continue
                 if (str[i] not in validNumber) and (not initialChar):
                     endIndex = i
                     lastEntryValid = False
+                    break
 
             if startIndex == -1:
                 return 0
@@ -105,14 +113,11 @@ class solutionLeetcode_8:
                 endIndex = len(str)
 
             numberStr = str[startIndex:endIndex]
-            return int(numberStr)
+            resultNumber = int(numberStr)
+            if resultNumber >= 2 ** 31:
+                return 2 ** 31 - 1
+            elif resultNumber <= -2 ** 31:
+                return -2 ** 31
+            else:
+                return resultNumber
 
-test_x = int(110)
-soln = solutionLeetcode_7()
-reverse_x = soln.reverse(test_x)
-print(reverse_x)
-
-testStrQ3 = 'fsafesvafdsag'
-solnQ3 = solutionLeetcode_3()
-_, longestSubstring = solnQ3.lengthOfLongestSubstring(testStrQ3)
-print(longestSubstring)
