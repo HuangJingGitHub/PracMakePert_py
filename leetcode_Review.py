@@ -121,3 +121,6 @@ class solutionLeetcode_8:
             else:
                 return resultNumber
 
+class solutionLeetcode_9:
+    def isPalindrome(self, x: int) -> bool:
+        retrun str(x) == str(x)[::-1]
