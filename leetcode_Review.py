@@ -100,8 +100,8 @@ class solutionLeetcode_8:
                             return 0
                         else:
                             return int(str[i])
-
                     continue
+                    
                 if (str[i] not in validNumber) and (not initialChar):
                     endIndex = i
                     lastEntryValid = False
