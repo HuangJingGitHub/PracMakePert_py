@@ -100,8 +100,8 @@ class solutionLeetcode_8:
                             return 0
                         else:
                             return int(str[i])
+
                     continue
-                    
                 if (str[i] not in validNumber) and (not initialChar):
                     endIndex = i
                     lastEntryValid = False
@@ -121,6 +121,15 @@ class solutionLeetcode_8:
             else:
                 return resultNumber
 
-class solutionLeetcode_9:
-    def isPalindrome(self, x: int) -> bool:
-        retrun str(x) == str(x)[::-1]
+
+class solutionLeetcode_10:
+    def isMatch(self, text: str, pattern: str) -> bool:
+        if not pattern:
+            return not text
+
+        first = bool(text) and pattern[0] in {text[0], '.'}
+
+        if len(pattern) >= 2 and pattern[1] == '*':
+            return self.isMatch(text, pattern[2:]) or (first and self.isMatch(text[1:], pattern))
+        else:
+            return first and self.isMatch(text[1:], pattern[1:])
