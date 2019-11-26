@@ -10,5 +10,5 @@ def main():
         time.sleep(1)
         contents = contents[1:] + contents[0]
 
-if __name__ == '__main__'
+if __name__ == '__main__':
     main()
