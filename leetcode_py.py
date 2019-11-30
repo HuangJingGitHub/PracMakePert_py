@@ -134,3 +134,26 @@ class solutionLeetcode_10:
         else:
             return firstMatch and self.isMatch(text[1:], pattern[1:])
 
+
+class solutionLeetcode_11:
+    def maxArea(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        maxArea = 0
+        left = 0
+        right = len(height) - 1
+        while left < right:
+            area = (right - left) * min(height[left], height[right])
+            if maxArea < area:
+                maxArea = area
+            
+            if height[left] < height[right]:
+                left += 1
+            else:
+                right -=1
+                
+        return maxArea
+ 
+
