@@ -1,7 +1,6 @@
 import numpy as np
 import scipy.io
 
-
 rotate_angle_20deg_1 = np.load('rotate_angle1.npy')
 scipy.io.savemat('rotate_angle_20deg_1.mat', {'angle_20deg_1': rotate_angle_20deg_1})
 rotate_angle_30deg_1 = np.load('rotate_angle2.npy')
