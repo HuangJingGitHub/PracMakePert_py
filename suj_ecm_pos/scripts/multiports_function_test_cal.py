@@ -126,7 +126,7 @@ def release_brakes(ser):
 
 def release_brakes_single(joint_num, ser):
     if joint_num not in [1, 2, 3, 4, 5, 6]:
-        print("Error: joint index out of range [1, 2,, 3, 4, 5, 6].")
+        print("Error: joint index out of range [1, 2, 3, 4, 5, 6].")
         return
 
     joint_index = str(joint_num).encode()
