@@ -25,7 +25,6 @@ def get_visual_info():
         print('Error in getting response from /do_manip/visual_info_service.')
 
 def rotz(ang_rad):
-    rotz = np.eye(3)
     rotz = np.array([[math.cos(ang_rad), -math.sin(ang_rad), 0],
                     [math.sin(ang_rad), math.cos(ang_rad), 0],
                     [0, 0, 1]])
@@ -76,8 +75,8 @@ def adjust_local_contact(adjustDirection = 0):
         
 
 def adjust_safety_constraint(visual_info, adjustDirection = 0):
-    x_t = psm.get_current_position()
-    x_t_pos = x_t.p
+    # x_t = psm.get_current_position()
+    # x_t_pos = x_t.p
     step = 0.005
     diff_lr = visual_info.sl - visual_info.sr
     diff_lr = np.array([diff_lr[0], diff_lr[1]])
@@ -105,16 +104,26 @@ if __name__ == '__main__':
 
     while True:
         visual_info = get_visual_info()
-        # check the local contact and safety constraint
+        # when deformation control can be performed
+        if check_local_contact(visual_info) and check_safety_constraint(visual_info):
+            K = 100
+            motion_step = 0.005
+            Jd_np = np.array([[visual_info.deformJacobian[0], visual_info.deformJacobian[1]]])
+            x_dot_image = -np.linalg.pinv(Jd_np) * K * visual_info.featureAngley
+            x_dot = np.matmul(camera2base, x_dot_image)
+            x_dot_t = x_dot / np.linalg.norm(x_dot) * motion_step
+            psm.dmove(x_dot_t)
+
+        while not check_safety_constraint(visual_info):
+            if visual_info.deformAngles[0] > visual_info.deformAngles[1]:
+                adjust_safety_constraint(visual_info, 0)
+            else:
+                adjust_safety_constraint(visual_info, 1)
+            visual_info = get_visual_info()
+
         while not check_local_contact(visual_info):
             if visual_info.contactDistancelr[0] > visual_info.contactDistancelr[1]:
                 adjust_local_contact(0)
             else:
                 adjust_local_contact(1)
             visual_info = get_visual_info()
-        
-        while not check_safety_constraint(visual_info):
-            if visual_info.deformAngles[0] > visual_info.deformAngles[1]:
-                adjust_safety_constraint(visual_info, 0)
-            else:
-                adjust_safety_constraint(visual_info, 0)
