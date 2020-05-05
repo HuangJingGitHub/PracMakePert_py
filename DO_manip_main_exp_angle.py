@@ -54,7 +54,7 @@ def process_visual_info(visual_info):
     log_contact_distance = np.append(log_contact_distance, max(visual_info.contactDistancelr))
     log_sw = np.append(log_sw, current_sw)
     log_s3 = np.append(log_s3, current_s3)
-    log_indictorw = np.append(log_indictorw, visual_info.indicatorw)
+    log_indicatorw = np.append(log_indicatorw, visual_info.indicatorw)
     log_distancew = np.append(log_distancew, visual_info.distancew)
     log_weightVector = np.append(log_weightVector, current_weightVector)
     log_distanceLinelrp = np.append(log_distanceLinelrp, distance_linelrp)   
@@ -112,7 +112,7 @@ def adjust_local_contact(adjust_direction = 0):
     else:
         print('Invalid Argument Given In Function: adjust_local_contact()')
         return
-    sleep(0.05)
+    sleep(0.1)
 
 def adjust_manipulatbility(visual_info):
     step = 0.0005
@@ -135,7 +135,7 @@ def adjust_manipulatbility(visual_info):
     x_dot_scale = x_dot / np.linalg.norm(x_dot) * step
     x_dot_kdl = PyKDL.Vector(x_dot_scale[0][0], x_dot_scale[1][0], x_dot_scale[2][0])
     psm.dmove(x_dot_kdl)
-    sleep(0.05)
+    sleep(0.1)
 
 def adjust_safety_constraint(visual_info, adjust_direction = 0):
     step = 0.0005
@@ -157,8 +157,6 @@ def adjust_safety_constraint(visual_info, adjust_direction = 0):
 
 if __name__ == '__main__':
     psm.home()
-    #init_joint_config = np.array([ 0.01037935, -0.01804803,  0.11688517, -0.00062907,  0.00054655, 0.00012608])
-    #init_joint_config = np.array([-0.12344788,  0.30524102,  0.10091488, -0.01530737, -0.35935399, 0.44307293])
     init_joint_config = np.array([-0.02574759,  0.10811826,  0.1057306 ,  1.53996294, -0.26589463, 0.33541677]) # normal initial
 
     psm.move_joint(init_joint_config)
@@ -171,7 +169,7 @@ if __name__ == '__main__':
     visual_info = get_visual_info()
     process_visual_info(visual_info)
 
-    while (current_angle > 5):
+    while (current_angle > 2):
         visual_info = get_visual_info()
         process_visual_info(visual_info)
                 
@@ -181,14 +179,13 @@ if __name__ == '__main__':
             K = 100
             motion_step = 0.0005
             Jd_np = np.array([[visual_info.deformJacobian[0], visual_info.deformJacobian[1]])
-            # x_dot_image = -K * np.matmul(np.linalg.pinv(Jd_np), pt_pos_error)
-            x_dot_image = -K * np.matmul(Jd_np.T, pt_pos_error)
-            #x_dot_image = -K * np.matmul(np.linalg.inv(Jd_np), pt_pos_error)
+            x_dot_image = -K * np.matmul(np.linalg.pinv(Jd_np), current_angle)
+            # x_dot_image = -K * np.matmul(Jd_np.T, current_angle)
 
+            print('current_angle')
+            print(current_angle)
             print('Jd_np')
             print(Jd_np)
-            print('pt_pos_error')
-            print(pt_pos_error)
             print('x_dot_image')
             print(x_dot_image)
 
@@ -210,33 +207,15 @@ if __name__ == '__main__':
                 adjust_local_contact(0)
             else:
                 adjust_local_contact(1)
-            
-            current_pt_pos = np.array([i for i in visual_info.featurePoint]).T
-            distance_linelrp = np.array([[i for i in visual_info.distancelrp]]).T
-            pt_pos_error = current_pt_pos - target_pt_pos
-            
-            log_feature = np.append(log_feature, current_pt_pos)
-            log_error = np.append(log_error, pt_pos_error)
-            log_contact_distance = np.append(log_contact_distance, max(visual_info.contactDistancelr))
-            log_distancew = np.append(log_distancew, visual_info.distancew)     
-            log_distanceLinelrp = np.append(log_distanceLinelrp, distance_linelrp)          
-            
+                 
+            process_visual_info(visual_info)
             visual_info = get_visual_info()
         
         while not check_manipulability(visual_info):
             print('Manipulability Adjustment')
             adjust_manipulatbility(visual_info)
-            
-            current_pt_pos = np.array([i for i in visual_info.featurePoint]).T
-            distance_linelrp = np.array([[i for i in visual_info.distancelrp]]).T
-            pt_pos_error = current_pt_pos - target_pt_pos
 
-            log_feature = np.append(log_feature, current_pt_pos)
-            log_error = np.append(log_error, pt_pos_error)
-            log_contact_distance = np.append(log_contact_distance, max(visual_info.contactDistancelr))
-            log_distancew = np.append(log_distancew, visual_info.distancew)
-            log_distanceLinelrp = np.append(log_distanceLinelrp, distance_linelrp)
-
+            process_visual_info(visual_info)
             visual_info = get_visual_info()
             
 
@@ -247,21 +226,15 @@ if __name__ == '__main__':
             else:
                 adjust_local_contact(1)
 
-            current_pt_pos = np.array([i for i in visual_info.featurePoint]).T
-            distance_linelrp = np.array([[i for i in visual_info.distancelrp]]).T
-            pt_pos_error = current_pt_pos - target_pt_pos
-            
-            log_feature = np.append(log_feature, current_pt_pos)
-            log_error = np.append(log_error, pt_pos_error)
-            log_contact_distance = np.append(log_contact_distance, max(visual_info.contactDistancelr))
-            log_distancew = np.append(log_distancew, visual_info.distancew)    
-            log_distanceLinelrp = np.append(log_distanceLinelrp, distance_linelrp)           
-            
+            process_visual_info(visual_info) 
             visual_info = get_visual_info()
 
     randIdxStr = str(np.random.randint(0,500))
-    np.save('log_featurePt' + randIdxStr, log_feature)
-    np.save('log_error' + randIdxStr, log_error)
+    np.save('log_angle' + randIdxStr, log_angle)
     np.save('log_contact_distance' + randIdxStr, log_contact_distance)
+    np.save('log_sw' + randIdxStr, log_sw)
+    np.save('log_s3_' + randIdxStr, log_s3)
+    np.save('log_indicatorw' + randIdxStr, log_indicatorw)
     np.save('log_distancew' + randIdxStr, log_distancew)
+    np.save('log_weightVector' + randIdxStr, log_weightVector)
     np.save('log_distance_linelrp' + randIdxStr, log_distanceLinelrp)
