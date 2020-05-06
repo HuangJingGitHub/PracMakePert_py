@@ -24,7 +24,6 @@ current_s3
 current_weightVector 
 distance_linelrp
 
-
 log_angle = np.array([])
 log_contact_distance = np.array([])
 log_sw = np.array([])
@@ -95,7 +94,6 @@ def check_manipulability(visual_info):
     else:
         return False
     
-
 def check_safety_constraint(visual_info):
     allowed_angle_El = 180
     allowed_angle_Er = 180
