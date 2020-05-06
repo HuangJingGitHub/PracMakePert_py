@@ -12,17 +12,17 @@ import sys
 from time import sleep
 
 deg2rad = np.pi / 180
-camera2base = np.array([[0.06226093630316476, -0.9607452735300874, -0.2703554978176891],
-                        [-0.8422941263057356, 0.09473492498153524, -0.5306278345315104],
-                        [0.5354102918337584, 0.2607562336327552, -0.8033318156404297]])
+camera2base = np.array([[-0.04508708642250811, -0.9483174140553883, -0.3141038631364326],
+                        [-0.6338211728705693, 0.2701892860569093, -0.7247540758912874],
+                        [0.7721644096038778, 0.166408629281535, -0.613245703321055]])
 
 psm = dvrk.psm('PSM1')
 
-current_angle 
-current_sw 
-current_s3 
-current_weightVector 
-distance_linelrp
+current_angle = 0
+current_sw = np.array([])
+current_s3 = np.array([])
+current_weightVector = np.array([])
+distance_linelrp = np.array([])
 
 log_angle = np.array([])
 log_contact_distance = np.array([])
@@ -43,7 +43,10 @@ def get_visual_info():
         print('Error in getting response from /do_manip/visual_info_service.')
 
 def process_visual_info(visual_info):
-    current_angle = visual_info.FeatureAngley
+    global log_angle, log_contact_distance, log_sw, log_s3, \
+            log_indicatorw, log_distancew, log_weightVector, log_distanceLinelrp, \
+            current_angle, current_sw, current_s3, current_weightVector, distance_linelrp
+    current_angle = visual_info.featureAngley
     current_sw = np.array([[i for i in visual_info.sw]]).T
     current_s3 = np.array([[i for i in visual_info.s3]]).T
     current_weightVector = np.array([[i for i in visual_info.weightVector]]).T
@@ -155,7 +158,7 @@ def adjust_safety_constraint(visual_info, adjust_direction = 0):
 
 if __name__ == '__main__':
     psm.home()
-    init_joint_config = np.array([-0.02574759,  0.10811826,  0.1057306 ,  1.53996294, -0.26589463, 0.33541677]) # normal initial
+    init_joint_config = np.array([-0.02963985,  0.27637344,  0.10573838,  1.51731643, -0.16724308, 0.19804296]) # normal initial
 
     psm.move_joint(init_joint_config)
 
@@ -176,9 +179,9 @@ if __name__ == '__main__':
             print('Local Contact Valid \nSafety Constraint Satisfied')
             K = 100
             motion_step = 0.0005
-            Jd_np = np.array([[visual_info.deformJacobian[0], visual_info.deformJacobian[1]])
-            x_dot_image = -K * np.matmul(np.linalg.pinv(Jd_np), current_angle)
-            # x_dot_image = -K * np.matmul(Jd_np.T, current_angle)
+            Jd_np = np.array([[visual_info.deformJacobian[0], visual_info.deformJacobian[1]]])
+            # x_dot_image = K * np.matmul(np.linalg.pinv(Jd_np), np.array([[current_angle]]))
+            x_dot_image = -K * np.matmul(Jd_np.T, np.array([[current_angle]]))
 
             print('current_angle')
             print(current_angle)
@@ -228,11 +231,11 @@ if __name__ == '__main__':
             visual_info = get_visual_info()
 
     randIdxStr = str(np.random.randint(0,500))
-    np.save('log_angle' + randIdxStr, log_angle)
-    np.save('log_contact_distance' + randIdxStr, log_contact_distance)
-    np.save('log_sw' + randIdxStr, log_sw)
-    np.save('log_s3_' + randIdxStr, log_s3)
-    np.save('log_indicatorw' + randIdxStr, log_indicatorw)
-    np.save('log_distancew' + randIdxStr, log_distancew)
-    np.save('log_weightVector' + randIdxStr, log_weightVector)
-    np.save('log_distance_linelrp' + randIdxStr, log_distanceLinelrp)
+    np.save('./data/0506/log_angle' + randIdxStr, log_angle)
+    np.save('./data/0506/log_contact_distance' + randIdxStr, log_contact_distance)
+    np.save('./data/0506/log_sw' + randIdxStr, log_sw)
+    np.save('./data/0506/log_s3_' + randIdxStr, log_s3)
+    np.save('./data/0506/log_indicatorw' + randIdxStr, log_indicatorw)
+    np.save('./data/0506/log_distancew' + randIdxStr, log_distancew)
+    np.save('./data/0506/log_weightVector' + randIdxStr, log_weightVector)
+    np.save('./data/0506/log_distance_linelrp' + randIdxStr, log_distanceLinelrp)
