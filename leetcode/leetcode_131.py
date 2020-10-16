@@ -11,7 +11,7 @@ class Solution:
     
     def backTracking(self, s: str, start: int, length: int, path: List[str], res: List[List[str]]) -> None:
         if start == length:
-            res.append(path.copy())  # append a copy, not a object reference, otherwise it will change dynamically with path and be an empty list at last.
+            res.append(path.copy())  # append a copy, not directly use an object reference, otherwise it will change dynamically with path and be an empty list at last.
             return
         
         for i in range(start, length):
