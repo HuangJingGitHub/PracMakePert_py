@@ -10,8 +10,7 @@ class Solution:
             elif len2 == 1:
                 return nums2[0] 
             else:
-                return 0
-                
+                return 0            
         targetCount = (len1 + len2) // 2
         count, idx1, idx2 = 1, 0, 0
 
