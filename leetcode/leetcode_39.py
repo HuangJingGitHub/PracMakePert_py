@@ -2,7 +2,6 @@ class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         res = []
         path = []
-
         candidates.sort()
         self.backtrace(candidates, 0, target, res, path)
         return res
