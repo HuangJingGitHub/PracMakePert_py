@@ -11,7 +11,7 @@ class Solution:
             curRes = []
             for boardRow in board:
                 curRes.append("".join(boardRow))
-            res.append(curRes.copy())
+            res.append(curRes)
             print(res)
             return
         
