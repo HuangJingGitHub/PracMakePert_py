@@ -12,9 +12,7 @@ class Solution:
         for k, v in tStrLog.items():
             charLog[k] = [0 for i in range(0, len(s) + 1)]
 
-        if s[0] in charLog:
-            charLog[s[0]][1] = 1
-        for i in range(1, len(s)):
+        for i in range(0, len(s)):
             for k, v in charLog.items():
                 charLog[k][i + 1] = charLog[k][i]
             if s[i] in charLog:
@@ -25,7 +23,6 @@ class Solution:
         resLen = 1e10
         resLeft = 0
         
-        print(charLog)
         while right < len(s):
             cover = True
             for k, v in tStrLog.items():
@@ -34,13 +31,14 @@ class Solution:
                     break
 
             if cover:
-                resLen = min(resLen, right - left + 1)
-                resLeft = left
+                if right - left + 1 < resLen:
+                    resLen = right - left + 1
+                    resLeft = left
                 left += 1
             else:
                 right += 1
 
         if resLen == 1e10:
             return ''
-        return s[resLeft : resLeft + resLen + 1]
+        return s[resLeft : resLeft + resLen]
         
