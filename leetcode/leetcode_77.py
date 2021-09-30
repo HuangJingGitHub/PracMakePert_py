@@ -11,7 +11,7 @@ class Solution:
             self.res.append(copy.deepcopy(path))
             return
         
-        for i in range(begin, n -k + len(path) + 2):
+        for i in range(begin, n -k + len(path) + 2):  # range(begin, n + 1) will also work but not efficient
             path.append(i)
             self.trackback(n, k, i + 1, path)
             path.pop(-1)
