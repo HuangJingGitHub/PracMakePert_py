@@ -8,7 +8,6 @@ class Solution:
                 res.append(word)
         return res
  
-
 class Solution:
     def uncommonFromSentences(self, A: str, B: str) -> List[str]:
         wordList = A.split() + B.split()
