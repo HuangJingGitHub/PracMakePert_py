@@ -3,10 +3,10 @@ class Solution:
         res = []
         path = []
         candidates.sort()
-        self.backtrace(candidates, 0, target, res, path)
+        self.backtrack(candidates, 0, target, res, path)
         return res
 
-    def backtrace(self, candidates: List[int], startIdx: int, target: int, res: List[List[int]], path: List[int]) -> None:
+    def backtrack(self, candidates: List[int], startIdx: int, target: int, res: List[List[int]], path: List[int]) -> None:
         if (target == 0):
             res.append(path.copy())
             return
@@ -14,5 +14,5 @@ class Solution:
         for i in range(startIdx, len(candidates)):
             if candidates[startIdx] <= target:
                 path.append(candidates[i])
-                self.backtrace(candidates, i, target - candidates[i], res, path)
+                self.backtrack(candidates, i, target - candidates[i], res, path)
                 path.pop()
