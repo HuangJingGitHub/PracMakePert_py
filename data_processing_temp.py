@@ -7,7 +7,6 @@ for i in range(3):
     line_str = file.readline()
     print(line_str)
 
-
 line_str = file.readline()
 line_list = line_str.split(" ")
 target_S = np.array([])
