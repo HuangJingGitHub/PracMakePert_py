@@ -175,7 +175,7 @@ class kdTree:
                 self.range_search_with_root(root.right, res, x_min, x_max, y_min, y_max, depth + 1)
     
     def range_search(self, 
-                     x_min: float, 
+                     x_min: float,
                      x_max: float,
                      y_min: float,
                      y_max: float):
@@ -184,6 +184,7 @@ class kdTree:
             print("Invalid range in range search")
             return res
         self.range_search_with_root(self._root, res, x_min, x_max, y_min, y_max, 0)
+        return res
 
 
         """ DEPRECATED 
@@ -224,4 +225,5 @@ class kdTree:
             if x_min >= x_max or y_min >= y_max:
                 print("Invalid range in range search")
                 return res
-            self.range_search_with_root(self._root, None, res, x_min, x_max, y_min, y_max, 0) """
+            self.range_search_with_root(self._root, None, res, x_min, x_max, y_min, y_max, 0) 
+            return res """
