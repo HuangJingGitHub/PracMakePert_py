@@ -15,7 +15,7 @@ class Node:
         self.min_dist = 200.
         
     def set_parent(self, node):
-        #self._parent = copy.deepcopy(node)
+        # self._parent = copy.deepcopy(node)
         self._parent = node
 
     def set_cost(self, cost):
@@ -145,7 +145,6 @@ class kdTree:
 
     def range_search_with_root(self,
                                 root: Node,
-                                parent: Node,
                                 res: list,
                                 x_min: float, 
                                 x_max: float,
@@ -154,23 +153,28 @@ class kdTree:
                                 depth: int):
         if root is None:
             return
-        if depth % self._kDimension == 0 and parent is not None:
-            if root._state[1] <= parent._state[1] and parent._state[1] < y_min:
-                return 
-            if root._state[1] > parent._state[1] and parent._state[1] > y_max:
-                return 
-        elif parent is not None:
-            if root._state[0] <= parent._state[0] and parent._state[0] < x_min:
-                return 
-            if root._state[0] > parent._state[0] and parent._state[0] > x_max:
-                return 
         
-        if root._state[0] >= x_min and root._state[0] <= x_max and root._state[1] >= y_min and root._state[1] < y_max:
+        if root._state[0] >= x_min and root._state[0] <= x_max and root._state[1] >= y_min and root._state[1] <= y_max:
             res.append(root)
-        self.range_search_with_root(root.left, root, res, x_min, x_max, y_min, y_max, depth + 1)
-        self.range_search_with_root(root.right, root, res, x_min, x_max, y_min, y_max, depth + 1)
+
+        if depth % self._kDimension == 0:
+            if root._state[0] < x_min:
+                self.range_search_with_root(root.right, res, x_min, x_max, y_min, y_max, depth + 1)
+            elif root._state[0] > x_max:
+                self.range_search_with_root(root.left, res, x_min, x_max, y_min, y_max, depth + 1)
+            else:
+                self.range_search_with_root(root.left, res, x_min, x_max, y_min, y_max, depth + 1)
+                self.range_search_with_root(root.right, res, x_min, x_max, y_min, y_max, depth + 1)
+        else:
+            if root._state[1] < y_min:
+                self.range_search_with_root(root.right, res, x_min, x_max, y_min, y_max, depth + 1)
+            elif root._state[1] > y_max:
+                self.range_search_with_root(root.left, res, x_min, x_max, y_min, y_max, depth + 1)
+            else:
+                self.range_search_with_root(root.left, res, x_min, x_max, y_min, y_max, depth + 1)
+                self.range_search_with_root(root.right, res, x_min, x_max, y_min, y_max, depth + 1)
     
-    def range_serach(self, 
+    def range_search(self, 
                      x_min: float, 
                      x_max: float,
                      y_min: float,
@@ -179,4 +183,45 @@ class kdTree:
         if x_min >= x_max or y_min >= y_max:
             print("Invalid range in range search")
             return res
-        self.range_search_with_root(self._root, None, res, x_min, x_max, y_min, y_max, 0)
+        self.range_search_with_root(self._root, res, x_min, x_max, y_min, y_max, 0)
+
+
+        """ DEPRECATED 
+        Implementation above is more compact and easy to understand.   
+        def range_search_with_root(self,
+                                root: Node,
+                                parent: Node,
+                                res: list,
+                                x_min: float, 
+                                x_max: float,
+                                y_min: float,
+                                y_max: float, 
+                                depth: int):
+            if root is None:
+                return
+            if depth % self._kDimension == 0 and parent is not None:
+                if root._state[1] <= parent._state[1] and parent._state[1] < y_min:
+                    return 
+                if root._state[1] > parent._state[1] and parent._state[1] > y_max:
+                    return 
+            elif parent is not None:
+                if root._state[0] <= parent._state[0] and parent._state[0] < x_min:
+                    return 
+                if root._state[0] > parent._state[0] and parent._state[0] > x_max:
+                    return 
+            
+            if root._state[0] >= x_min and root._state[0] <= x_max and root._state[1] >= y_min and root._state[1] <= y_max:
+                res.append(root)
+            self.range_search_with_root(root.left, root, res, x_min, x_max, y_min, y_max, depth + 1)
+            self.range_search_with_root(root.right, root, res, x_min, x_max, y_min, y_max, depth + 1)
+        
+        def range_search(self, 
+                        x_min: float, 
+                        x_max: float,
+                        y_min: float,
+                        y_max: float):
+            res = []
+            if x_min >= x_max or y_min >= y_max:
+                print("Invalid range in range search")
+                return res
+            self.range_search_with_root(self._root, None, res, x_min, x_max, y_min, y_max, 0) """
