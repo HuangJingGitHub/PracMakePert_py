@@ -180,7 +180,7 @@ class kdTree:
                      y_min: float,
                      y_max: float):
         res = []
-        if x_min >= x_max or y_min >= y_max:
+        if x_min > x_max or y_min > y_max:
             print("Invalid range in range search")
             return res
         self.range_search_with_root(self._root, res, x_min, x_max, y_min, y_max, 0)
