@@ -17,7 +17,6 @@ from cs285.infrastructure.action_noise_wrapper import ActionNoiseWrapper
 
 MAX_NVIDEO = 2
 
-
 def run_training_loop(args):
     logger = Logger(args.logdir)
 
