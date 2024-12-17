@@ -120,7 +120,6 @@ def run_training_loop(args):
                 video_title="eval_rollouts",
             )
 
-
 def main():
     import argparse
 
