@@ -5,7 +5,6 @@ import torch.optim as optim
 
 
 class Net(nn.Module):
-
     def __init__(self):
         super(Net, self).__init__()
         # 1 input image channel, 6 output channels, 5x5 square convolution
