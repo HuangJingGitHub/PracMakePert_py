@@ -43,7 +43,6 @@ class Net(nn.Module):
         output = self.fc3(f6)
         return output
 
-
 net = Net()
 print(net)
 
