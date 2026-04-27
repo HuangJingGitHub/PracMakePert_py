@@ -69,17 +69,21 @@ class RRTStarTabletop:
         else:
             raise ValueError("Unknown cost type in planner")
 
+    
     def dist(self, n1: Node, n2: Node):
         return float(np.linalg.norm(n1.pos - n2.pos))
 
+    
     def collision_pt(self, node: Node):
         assert node is not None, "Node is None in collision check"
         return not self.env.pt_obstacle_free(node.pos)
 
+    
     def collision_edge(self, n1: Node, n2: Node):
         assert n1 is not None and n2 is not None, "Node is None in collision_edge check"
         return not self.env.seg_obstacle_free(n1.pos, n2.pos)
 
+    
     def sample(self):
         return Node(
             [
@@ -88,6 +92,7 @@ class RRTStarTabletop:
             ]
         )
 
+    
     def nearest(self, rnd: Node) -> Optional[Node]:
         if self._kdtree is None:
             return None
@@ -100,6 +105,7 @@ class RRTStarTabletop:
             center=tuple(node.pos), radius=self.search_radius
         )
 
+    
     def steer(self, from_node: Node, to_node: Node) -> Optional[Node]:
         direction = to_node.pos - from_node.pos
         dist = np.linalg.norm(direction)
@@ -122,6 +128,7 @@ class RRTStarTabletop:
         if self.cost_type == "clearance":
             new_node.clearance = self.env.pt_clearance(new_node.pos)
         return new_node
+
     
     def update_node_cost(self, node: Node):
         node.cost = 0
@@ -133,6 +140,7 @@ class RRTStarTabletop:
             else:
                 node.cost = -min(-node.parent.cost, node.clearance)
 
+    
     def new_cost(self, from_node: Node, to_node: Node):
         # if from_node is not None or to_node is not None:
         #     raise ValueError("Neither from_node and to_node should be None")
@@ -159,6 +167,7 @@ class RRTStarTabletop:
 
         return best_parent
 
+    
     def update_subtree(self, new_parent: Node, child: Node):
         old_parent = child.parent
         if old_parent is new_parent:
@@ -179,6 +188,7 @@ class RRTStarTabletop:
                 self.update_node_cost(child)
                 queue.append(child)
 
+    
     def rewire(self, new_node: Node, neighbors: List[Node]):
         for node in neighbors:
             if node is new_node.parent:
@@ -190,6 +200,7 @@ class RRTStarTabletop:
             if new_cost < node.cost - 1e-9:
                 self.update_subtree(new_node, node)
 
+    
     def plan(self, stop_on_first_path=False):
         """
         Run RRT* planning. If stop_on_first_path is True, return as soon as goal is connected.
